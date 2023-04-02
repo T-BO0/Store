@@ -1,4 +1,5 @@
 {
     "material-icon-theme.folders.color": "#431DC4",
-    "material-icon-theme.hidesExplorerArrows": true
+    "material-icon-theme.hidesExplorerArrows": true,
+    "material-icon-theme.activeIconPack": "react_redux"
 }
