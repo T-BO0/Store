@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using API.Data;
+using API.Middleware;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ builder.Services.AddCors();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddlware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
