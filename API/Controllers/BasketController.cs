@@ -1,6 +1,7 @@
 using API.Data;
 using API.DTOS;
 using API.Entities;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +36,7 @@ namespace API.Controllers
 
             var product = await _context.Products.FindAsync(productId);
             if(product == null)
-                return NotFound();
+                return BadRequest( new ProblemDetails{Title = "Product Not Found"});
 
             basket.AddItem(product, quantity);
 
@@ -61,8 +62,6 @@ namespace API.Controllers
 
             return BadRequest(new ProblemDetails{Title = "problem removing item from basket"});
         }
-
-
 
 
 
