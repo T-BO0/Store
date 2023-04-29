@@ -22,11 +22,11 @@ namespace API.Controllers
         {
             var query = _context.Products
             .Sort(productsParams.OrderBy)
-            .Search(productsParams.OrderBy)
+            .Search(productsParams.SearchTerm)
             .Filter(productsParams.Brands, productsParams.Types)
             .AsQueryable();
 
-            var products  = await PagedList<Product>.ToPagedList(query, productsParams.Pageumber, productsParams.PageSize);
+            var products  = await PagedList<Product>.ToPagedList(query, productsParams.PageNumber, productsParams.PageSize);
             
             Response.AddPaginationHeader(products.MetaData);
             return products;
