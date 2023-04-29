@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'react-toastify';
 import { router } from '../router/Router';
+import { PaginatedResponse } from '../models/pagination';
 
 //explicit delay 1.
 const sleep = () => new Promise(resolve => setTimeout(resolve,500));
@@ -12,6 +13,11 @@ const responceBody = (responce: AxiosResponse) => responce.data;
 
 axios.interceptors.response.use(async responce => {
     await sleep();
+    const pagination = responce.headers['pagination'];
+    if(pagination) {
+        responce.data = new PaginatedResponse(responce.data, JSON.parse(pagination));
+        return responce;
+    }
    return responce;
 }, (error: AxiosError)=>{
     const {data, status} = error.response as AxiosResponse;

@@ -6,18 +6,17 @@ import {
   fetchFilters,
   fetchProductsAsync,
   productSelectors,
+  setPageNumber,
   setProductsParams,
 } from "./catalogSlice";
 import {
-  Box,
   Grid,
-  Pagination,
   Paper,
-  Typography,
 } from "@mui/material";
 import ProductSearch from "./Productsearch";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 import CheckboxButtons from "../../app/components/CheckboxButtons";
+import AppPagination from "../../app/components/AppPagination";
 
 
 const sortOptions = [
@@ -30,7 +29,7 @@ const sortOptions = [
 //comp
 export default function Catalog() {
   const products = useAppSelector(productSelectors.selectAll);
-  const { productsLoaded, status, filtersLoaded, brands, types, productParam } = useAppSelector(
+  const { productsLoaded, filtersLoaded, brands, types, productParam, metaData } = useAppSelector(
     (state) => state.catalog
   );
   const dispatch = useAppDispatch();
@@ -43,10 +42,10 @@ export default function Catalog() {
     if (!filtersLoaded) dispatch(fetchFilters());
   }, [dispatch, filtersLoaded]);
 
-  if (status.includes("pending"))
+  if (!filtersLoaded)
     return <LoadingComponent message="Loading products..." />;
   return (
-    <Grid container spacing={4}>
+    <Grid container columnSpacing={4}>
       <Grid item xs={3}>
         <Paper sx={{ mb: 2 }}>
           <ProductSearch/>
@@ -81,16 +80,13 @@ export default function Catalog() {
         <ProductList products={products} />
       </Grid>
       <Grid item xs={3}/>
-      <Grid item xs={9}>
-        <Box display='flex' justifyContent='space-between' alignItems='center' >
-            <Typography>Displying 1-6 of 20 items</Typography>
-            <Pagination
-                color="secondary"
-                size="large"
-                count={10}
-                page={1}
-            />
-        </Box>
+      <Grid item xs={9} sx={{mb:2}}>
+        {metaData &&
+        <AppPagination
+          metaData={metaData}
+          onPageChange={(page:number) => dispatch(setPageNumber({pageNumber: page}))}
+        />
+        }
       </Grid>
     </Grid>
   );
