@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios'
 import { toast } from 'react-toastify';
 import { router } from '../router/Router';
 import { PaginatedResponse } from '../models/pagination';
+import { store } from '../store/configureStore';
 
 //explicit delay 1.
 const sleep = () => new Promise(resolve => setTimeout(resolve,500));
@@ -10,6 +11,12 @@ axios.defaults.baseURL = 'http://localhost:5152/api/';
 axios.defaults.withCredentials = true;
 
 const responceBody = (responce: AxiosResponse) => responce.data;
+
+axios.interceptors.request.use(config => {
+    const token = store.getState().account.user?.token;
+    if(token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+})
 
 axios.interceptors.response.use(async responce => {
     await sleep();
@@ -76,6 +83,12 @@ const Basket = {
     addItem: (productId:number, quantity = 1) => requests.post(`basket?productId=${productId}&quantity=${quantity}`,{}),
     removeItem: (productId:number, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
 }
+//Account
+const Account = {
+    login: (value: any) => requests.post('account/login', value),
+    register: (value: any) => requests.post('account/register', value),
+    currentUser: () => requests.get('account/currentUser'),
+}
 
 
 
@@ -84,5 +97,6 @@ const agent = {
     Catalog,
     TestErrors,
     Basket,
+    Account,
 }
 export default agent;
