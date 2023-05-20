@@ -96,6 +96,10 @@ const Orders = {
     featch: (id:number) => requests.get(`order/${id}`),
     create: (values: any) => requests.post('order', values),
 }
+//stripe
+const Payment = {
+    createPaymentIntent: () => requests.post('payments', {}),
+}
 
 
 
@@ -106,5 +110,6 @@ const agent = {
     Basket,
     Account,
     Orders,
+    Payment,
 }
 export default agent;
