@@ -7,7 +7,7 @@ import { store } from '../store/configureStore';
 //explicit delay 1.
 const sleep = () => new Promise(resolve => setTimeout(resolve,500));
 
-axios.defaults.baseURL = 'http://localhost:5152/api/';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.withCredentials = true;
 
 const responceBody = (responce: AxiosResponse) => responce.data;
@@ -19,7 +19,7 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(async responce => {
-    await sleep();
+    if(process.env.NODE_ENV === 'development') await sleep();
     const pagination = responce.headers['pagination'];
     if(pagination) {
         responce.data = new PaginatedResponse(responce.data, JSON.parse(pagination));
