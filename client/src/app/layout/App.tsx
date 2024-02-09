@@ -35,8 +35,11 @@ function App() {
     palette:{
       mode: paletteType,
       background : {
-        default: paletteType === 'light' ? '#eaeaea' : '#121212',
+        default: paletteType === 'light' ? '#eaeaea' : '#173561'
       },
+      secondary:{
+        main:'#c19b80'
+      }
     }
   });
   function handleThemeChange(){
