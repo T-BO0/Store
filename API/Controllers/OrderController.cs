@@ -54,7 +54,7 @@ namespace API.Controllers
 
             foreach(var item in basket.Items)
             {
-                var productItem = await _context.Products.FindAsync(item.Id);
+                var productItem = await _context.Products.FindAsync(item.ProductId);//
                 var itemOrdered = new ProductItemOrdered
                 {
                     ProductId = productItem.Id,
